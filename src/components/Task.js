@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
+import { provider } from "../TaskScheduler";
 const Task = (props) => {
+  const { deleteTask } = useContext(provider);
   const [taskStatus, setTaskStatus] = useState(true);
   const changeStatus = () => {
     setTaskStatus(!taskStatus);
@@ -19,7 +21,7 @@ const Task = (props) => {
           </button>
           <button
             className="delete--btn"
-            onClick={() => props.onDelete(props.task.id)}
+            onClick={() => deleteTask(props.task.id)}
           >
             X
           </button>

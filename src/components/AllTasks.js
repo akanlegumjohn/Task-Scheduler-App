@@ -1,11 +1,15 @@
+import { useContext } from "react";
+import { provider } from "../TaskScheduler";
 import Task from "./Task";
 
-const AllTasks = (props) => {
+const AllTasks = () => {
+  const { tasks } = useContext(provider);
+
   return (
     <div className="main--div">
       <div className="tasks--container">
-        {props.tasksToDisplay.map((task) => (
-          <Task task={task} onDelete={props.onDelete} />
+        {tasks.map((task) => (
+          <Task task={task} />
         ))}
       </div>
     </div>

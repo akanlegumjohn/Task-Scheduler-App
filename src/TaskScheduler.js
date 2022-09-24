@@ -1,21 +1,20 @@
+import { useState, createContext } from "react";
+import AllTasks from "./components/AllTasks";
+import Header from "./components/Header";
+import AddTask from "./components/AddTask";
 import "./App.css";
 
-import { useState } from "react";
-import AllTasks from "./components/AllTasks";
-import { Header } from "./components/Header";
-import AddTask from "./AddTask";
-
+export const provider = createContext();
 function TaskScheduler() {
+  const [id, setId] = useState(1);
   const [tasks, setTasks] = useState([
-    { id: 1, text: "Home work", day: "Tue 6th May at 2:00PM" },
-    { id: 2, text: "Watch football match", day: "Mon 5th May at 3:15PM" },
-    { id: 3, text: "Visit a friend", day: "Wed 7th May at 9:00AM" },
+    { id: id, text: "Home work", day: "Tue 6th May at 2:00PM" },
   ]);
   const [showTask, setShowTask] = useState(false);
 
   // Delete tasks
 
-  const deletetask = (id) => {
+  const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
@@ -23,21 +22,22 @@ function TaskScheduler() {
     setShowTask(!showTask);
   };
   const addTask = (task) => {
-    const newId = Math.round(Math.random() * 10000) + 1;
-    const newTask = { ...task, newId };
+    const newTask = { ...task, id };
     setTasks([...tasks, newTask]);
+    setId((prevId) => prevId + 1);
+    console.log(task);
   };
 
   return (
-    <div>
-      <Header displayForm={displayForm} showTask={showTask} />
+    <provider.Provider value={{ tasks, deleteTask, displayForm, showTask }}>
+      <Header />
       {showTask && <AddTask addTask={addTask} />}
       {tasks.length > 0 ? (
-        <AllTasks tasksToDisplay={tasks} onDelete={deletetask} />
+        <AllTasks />
       ) : (
         <h3 className="empty--container">OOPS!! There are no tasks yet.</h3>
       )}
-    </div>
+    </provider.Provider>
   );
 }
 
